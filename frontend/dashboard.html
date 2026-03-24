@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Event Management Dashboard - View and manage your events">
+    <title>Dashboard - Event Manager</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <!-- Mobile menu toggle -->
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+    <div class="app-container">
+        <!-- ====================================
+             Sidebar Navigation
+             ==================================== -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📅 Event Manager</h2>
+                <p>Manage your events</p>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="/dashboard" class="active"><span class="icon">🏠</span> Dashboard</a></li>
+                <li><a href="/event"><span class="icon">➕</span> Create Event</a></li>
+                <li id="admin-link" class="hidden"><a href="/admin"><span class="icon">⚙️</span> Admin Panel</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">U</div>
+                    <div>
+                        <div class="user-name" id="user-name">User</div>
+                        <div class="user-role" id="user-role">user</div>
+                    </div>
+                </div>
+                <button class="btn btn-outline btn-sm btn-block" onclick="handleLogout()">
+                    🚪 Logout
+                </button>
+            </div>
+        </nav>
+
+        <!-- ====================================
+             Main Content
+             ==================================== -->
+        <main class="main-content">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Dashboard</h1>
+                <div class="flex gap-10 items-center">
+                    <!-- Notification Bell -->
+                    <div class="notification-bell" onclick="toggleNotifications()">
+                        🔔
+                        <span class="notification-count hidden" id="notif-count">0</span>
+                    </div>
+                    <a href="/event" class="btn btn-primary">➕ New Event</a>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid" id="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-total">0</div>
+                    <div class="stat-label">Total Events</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-upcoming">0</div>
+                    <div class="stat-label">Upcoming</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-completed">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-participating">0</div>
+                    <div class="stat-label">Participating In</div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-bar">
+                <select id="filter-status" onchange="loadEvents()">
+                    <option value="">All Statuses</option>
+                    <option value="upcoming">Upcoming</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+                <input type="date" id="filter-from" onchange="loadEvents()" placeholder="From date">
+                <input type="date" id="filter-to" onchange="loadEvents()" placeholder="To date">
+                <button class="btn btn-outline btn-sm" onclick="clearFilters()">Clear Filters</button>
+            </div>
+
+            <!-- My Events Section -->
+            <div class="card-header">
+                <h3>📋 My Events</h3>
+            </div>
+            <div class="events-grid" id="own-events-grid">
+                <!-- Events will be loaded here dynamically -->
+            </div>
+
+            <!-- Participating Events Section -->
+            <div class="card-header mt-20">
+                <h3>👥 Events I'm Invited To</h3>
+            </div>
+            <div class="events-grid" id="participating-events-grid">
+                <!-- Participating events will be loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- ====================================
+         Notification Panel (Slide-in)
+         ==================================== -->
+    <div class="notification-panel" id="notification-panel">
+        <div class="notification-panel-header">
+            <h3>🔔 Notifications</h3>
+            <div class="flex gap-10">
+                <button class="btn btn-sm btn-outline" onclick="markAllRead()">Mark all read</button>
+                <button class="modal-close" onclick="toggleNotifications()">✕</button>
+            </div>
+        </div>
+        <div class="notification-list" id="notification-list">
+            <!-- Notifications will be loaded here -->
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/notifications.js"></script>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

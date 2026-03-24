@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Panel - Manage Users and Events">
+    <title>Admin Panel - Event Manager</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📅 Event Manager</h2>
+                <p>Manage your events</p>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="/dashboard"><span class="icon">🏠</span> Dashboard</a></li>
+                <li><a href="/event"><span class="icon">➕</span> Create Event</a></li>
+                <li><a href="/admin" class="active"><span class="icon">⚙️</span> Admin Panel</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">A</div>
+                    <div>
+                        <div class="user-name" id="user-name">Admin</div>
+                        <div class="user-role" id="user-role">admin</div>
+                    </div>
+                </div>
+                <button class="btn btn-outline btn-sm btn-block" onclick="handleLogout()">🚪 Logout</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>⚙️ Admin Panel</h1>
+            </div>
+
+            <!-- Admin Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-users">0</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="stat-events">0</div>
+                    <div class="stat-label">Total Events</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="auth-tabs mb-20">
+                <button class="active" onclick="showAdminTab('users')" id="users-tab">👥 All Users</button>
+                <button onclick="showAdminTab('events')" id="events-tab">📋 All Events</button>
+            </div>
+
+            <!-- Users Table -->
+            <div class="card" id="users-section">
+                <div class="card-header">
+                    <h3>Registered Users</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <tr><td colspan="4" class="text-center" style="color: var(--gray-400);">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Events Table -->
+            <div class="card hidden" id="events-section">
+                <div class="card-header">
+                    <h3>All Events</h3>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Created By</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="events-table-body">
+                            <tr><td colspan="5" class="text-center" style="color: var(--gray-400);">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Event Details and Participant Management">
+    <title>Event Detail - Event Manager</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>📅 Event Manager</h2>
+                <p>Manage your events</p>
+            </div>
+            <ul class="sidebar-nav">
+                <li><a href="/dashboard"><span class="icon">🏠</span> Dashboard</a></li>
+                <li><a href="/event"><span class="icon">➕</span> Create Event</a></li>
+                <li id="admin-link" class="hidden"><a href="/admin"><span class="icon">⚙️</span> Admin Panel</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">U</div>
+                    <div>
+                        <div class="user-name" id="user-name">User</div>
+                        <div class="user-role" id="user-role">user</div>
+                    </div>
+                </div>
+                <button class="btn btn-outline btn-sm btn-block" onclick="handleLogout()">🚪 Logout</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1>Event Details</h1>
+                <a href="/dashboard" class="btn btn-outline">← Back to Dashboard</a>
+            </div>
+
+            <div id="event-alert"></div>
+
+            <!-- Event Info Card -->
+            <div class="card" id="event-info">
+                <p class="text-center" style="color: var(--gray-400);">Loading event details...</p>
+            </div>
+
+            <!-- Participants Section -->
+            <div class="card mt-20">
+                <div class="card-header">
+                    <h3>👥 Participants</h3>
+                    <button class="btn btn-primary btn-sm" id="invite-btn" onclick="showInviteModal()">
+                        ➕ Invite
+                    </button>
+                </div>
+
+                <div id="participants-container">
+                    <p class="text-center" style="color: var(--gray-400);">Loading participants...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Invite Participant Modal -->
+    <div class="modal-overlay" id="invite-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Invite Participant</h3>
+                <button class="modal-close" onclick="hideInviteModal()">✕</button>
+            </div>
+            <div id="invite-alert"></div>
+            <div class="form-group">
+                <label for="invite-email">Participant Email</label>
+                <input type="email" id="invite-email" placeholder="Enter user's email address">
+            </div>
+            <button class="btn btn-primary" onclick="inviteParticipant()">
+                📩 Send Invitation
+            </button>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/event-detail.js"></script>
+</body>
+</html>
