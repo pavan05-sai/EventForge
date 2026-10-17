@@ -5,6 +5,7 @@
 // Also includes scheduling conflict detection.
 
 const EventModel = require('../models/eventModel');
+const ParticipantModel = require('../models/participantModel');
 const NotificationModel = require('../models/notificationModel');
 
 // ---- GET all events for the logged-in user ----
@@ -44,6 +45,11 @@ async function getEvent(req, res, next) {
 
         if (!event) {
             return res.status(404).json({ error: 'Event not found.' });
+        }
+
+        const isParticipant = await ParticipantModel.findByEventAndUser(event.id, req.user.id);
+        if (event.created_by !== req.user.id && !isParticipant && req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'You do not have access to this event.' });
         }
 
         res.json({ event });

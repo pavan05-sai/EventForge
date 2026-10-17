@@ -44,11 +44,12 @@ async function updateStatus(id, status) {
 }
 
 // ---- Remove a participant from an event ----
-async function remove(id) {
+async function remove(eventId, id) {
     const { error } = await supabase
         .from('participants')
         .delete()
-        .eq('id', id);
+        .eq('id', id)
+        .eq('event_id', eventId);
 
     if (error) throw error;
     return true;

@@ -72,17 +72,16 @@ CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
 CREATE INDEX IF NOT EXISTS idx_notifications_read ON notifications(is_read);
 
 -- ====================================
--- 6. DISABLE ROW LEVEL SECURITY
+-- 6. ROW LEVEL SECURITY
 -- ====================================
--- Since we handle auth in our backend (not Supabase Auth),
--- we disable RLS so our backend can freely query all tables.
+-- The backend uses the server-only service-role key. Keep RLS enabled and
+-- remove the old permissive policies so the public anon key cannot access data.
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE participants ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 
--- Create policies that allow all operations (our backend handles auth via JWT)
-CREATE POLICY "Allow all operations on users" ON users FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all operations on events" ON events FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all operations on participants" ON participants FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow all operations on notifications" ON notifications FOR ALL USING (true) WITH CHECK (true);
+DROP POLICY IF EXISTS "Allow all operations on users" ON users;
+DROP POLICY IF EXISTS "Allow all operations on events" ON events;
+DROP POLICY IF EXISTS "Allow all operations on participants" ON participants;
+DROP POLICY IF EXISTS "Allow all operations on notifications" ON notifications;

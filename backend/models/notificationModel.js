@@ -38,13 +38,14 @@ async function create(notificationData) {
 }
 
 // ---- Mark a notification as read ----
-async function markAsRead(id) {
+async function markAsRead(id, userId) {
     const { data, error } = await supabase
         .from('notifications')
         .update({ is_read: true })
         .eq('id', id)
+        .eq('user_id', userId)
         .select()
-        .single();
+        .maybeSingle();
 
     if (error) throw error;
     return data;

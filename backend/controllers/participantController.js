@@ -20,6 +20,11 @@ async function getParticipants(req, res, next) {
             return res.status(404).json({ error: 'Event not found.' });
         }
 
+        const isParticipant = await ParticipantModel.findByEventAndUser(eventId, req.user.id);
+        if (event.created_by !== req.user.id && !isParticipant && req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'You do not have access to this event.' });
+        }
+
         const participants = await ParticipantModel.findByEvent(eventId);
 
         res.json({ participants });
@@ -159,7 +164,7 @@ async function removeParticipant(req, res, next) {
             });
         }
 
-        await ParticipantModel.remove(pid);
+        await ParticipantModel.remove(eventId, pid);
 
         res.json({ message: 'Participant removed successfully.' });
     } catch (error) {

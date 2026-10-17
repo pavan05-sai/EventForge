@@ -7,6 +7,10 @@
 // Load environment variables from .env file
 require('dotenv').config();
 
+if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32 || process.env.JWT_SECRET.startsWith('replace_with_')) {
+    throw new Error('JWT_SECRET must be set to a random value of at least 32 characters.');
+}
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -44,6 +48,10 @@ app.use(express.json());
 // Serve static files from the "public" folder
 // This serves our HTML, CSS, and JS files
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
+
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
 
 // ====================================
 // API Routes

@@ -27,7 +27,11 @@ async function markAsRead(req, res, next) {
     try {
         const notificationId = req.params.id;
 
-        const notification = await NotificationModel.markAsRead(notificationId);
+        const notification = await NotificationModel.markAsRead(notificationId, req.user.id);
+
+        if (!notification) {
+            return res.status(404).json({ error: 'Notification not found.' });
+        }
 
         res.json({
             message: 'Notification marked as read.',
