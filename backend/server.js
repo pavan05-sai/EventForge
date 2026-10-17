@@ -37,9 +37,17 @@ const PORT = process.env.PORT || 3000;
 // Middleware Setup
 // ====================================
 
-// Enable CORS (Cross-Origin Resource Sharing)
-// This allows the frontend to make requests to the backend
-app.use(cors());
+// Allow the local frontend and explicitly configured deployed frontend origins.
+const allowedOrigins = new Set([
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    ...(process.env.FRONTEND_URL || '').split(',').map(origin => origin.trim()).filter(Boolean),
+]);
+app.use(cors({
+    origin(origin, callback) {
+        callback(null, !origin || allowedOrigins.has(origin));
+    },
+}));
 
 // Parse JSON request bodies
 // This lets us access req.body in our route handlers

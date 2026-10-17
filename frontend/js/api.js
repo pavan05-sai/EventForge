@@ -5,7 +5,7 @@
 // It automatically attaches the JWT token to every request.
 // All other JS files use this to communicate with the backend.
 
-const API_BASE = '/api';
+const API_BASE = window.EVENT_API_BASE || '/api';
 
 // ---- Get the stored JWT token ----
 function getToken() {

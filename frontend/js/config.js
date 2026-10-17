@@ -1,0 +1,1 @@
+window.EVENT_API_BASE = '/api';

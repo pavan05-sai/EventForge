@@ -25,17 +25,19 @@ npm start
 
 Open `http://localhost:3000`. The health endpoint is `http://localhost:3000/health`.
 
-## Deploy to Render
+## Deploy Frontend to Vercel and Backend to Render
 
-The repository includes a `render.yaml` Blueprint for one Node web service that serves both the API and frontend. The service uses the backend as its root directory, runs `npm ci` and `npm start`, and checks `/health`.
+The Render service runs the API. Vercel serves the static frontend from `frontend/`.
 
-1. Create a Supabase project and run `database/schema.sql` in the Supabase SQL Editor.
-2. In Supabase Project Settings, copy the Project URL and **service_role** key. Keep the service-role key private; do not use the anon key for this backend and never add either key to frontend files.
-3. Push this repository to GitHub and create a Render account.
-4. In Render, choose **New +** > **Blueprint**, connect this GitHub repository, and deploy the `render.yaml` configuration.
-5. In the Render service environment settings, set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`. Render generates `JWT_SECRET` from the Blueprint. Keep `NODE_ENV=production`.
-6. Wait for the Render health check to pass, then open the service's `onrender.com` URL. Register a user and sign in to verify the database connection.
-7. To grant the first account admin access, register it first, then run this in the Supabase SQL Editor with that account's email:
+1. Deploy the backend to Render: choose **New + → Blueprint**, connect this repository, and deploy `render.yaml`.
+2. In Render environment settings, set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`. Render generates `JWT_SECRET`. Leave `NODE_ENV=production`.
+3. Wait for Render's `/health` check to pass. Copy the backend URL, for example `https://your-service.onrender.com`.
+4. In [`frontend/js/config.js`](frontend/js/config.js), set `window.EVENT_API_BASE` to the Render API URL ending in `/api`, for example `https://your-service.onrender.com/api`. This is a public API address, not a secret. Commit and push this change.
+5. In Vercel, choose **Add New → Project**, import this repository, set **Root Directory** to `frontend`, and deploy. The `vercel.json` file configures clean URLs for routes such as `/dashboard` and `/event`.
+6. Copy the deployed Vercel origin (for example, `https://your-app.vercel.app`). In Render environment settings set `FRONTEND_URL` to that exact origin, with no trailing slash, then save/redeploy. This allows the browser frontend to call the API.
+7. Open the Vercel URL, register an account, sign in, and create an event to verify frontend-to-API and database connectivity.
+
+To grant the first account admin access, register it first, then run this in the Supabase SQL Editor with that account's email:
 
 ```sql
 UPDATE public.users
@@ -44,6 +46,8 @@ WHERE email = 'your-account@example.com';
 ```
 
 Role changes take effect on the next request because the backend checks the user's current database role.
+
+`FRONTEND_URL` can contain comma-separated allowed origins if you need to permit more than one deployed frontend URL. Never put Supabase keys in Vercel; only the backend needs the service-role key.
 
 ## Configuration
 
