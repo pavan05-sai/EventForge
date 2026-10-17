@@ -1,1 +1,1 @@
-window.EVENT_API_BASE = '/api';
+window.EVENT_API_BASE = 'https://eventforge-backend-grfg.onrender.com/api';
