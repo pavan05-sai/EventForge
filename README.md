@@ -27,15 +27,14 @@ Open `http://localhost:3000`. The health endpoint is `http://localhost:3000/heal
 
 ## Deploy Frontend to Vercel and Backend to Render
 
-The Render service runs the API. Vercel serves the static frontend from `frontend/`.
+The Render service runs the API. Vercel serves the static frontend from `frontend/`. Deploy Vercel first to obtain its production origin for Render's CORS allowlist.
 
-1. Deploy the backend to Render: choose **New + → Blueprint**, connect this repository, and deploy `render.yaml`.
-2. In Render environment settings, set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`. Render generates `JWT_SECRET`. Leave `NODE_ENV=production`.
-3. Wait for Render's `/health` check to pass. Copy the backend URL, for example `https://your-service.onrender.com`.
-4. In [`frontend/js/config.js`](frontend/js/config.js), set `window.EVENT_API_BASE` to the Render API URL ending in `/api`, for example `https://your-service.onrender.com/api`. This is a public API address, not a secret. Commit and push this change.
-5. In Vercel, choose **Add New → Project**, import this repository, set **Root Directory** to `frontend`, and deploy. The `vercel.json` file configures clean URLs for routes such as `/dashboard` and `/event`.
-6. Copy the deployed Vercel origin (for example, `https://your-app.vercel.app`). In Render environment settings set `FRONTEND_URL` to that exact origin, with no trailing slash, then save/redeploy. This allows the browser frontend to call the API.
-7. Open the Vercel URL, register an account, sign in, and create an event to verify frontend-to-API and database connectivity.
+1. In Vercel, choose **Add New → Project**, import this repository, set **Root Directory** to `frontend`, and deploy. The `vercel.json` file configures clean URLs for routes such as `/dashboard` and `/event`.
+2. Copy the Vercel production origin (for example, `https://your-app.vercel.app`).
+3. Deploy the backend to Render: choose **New + → Blueprint**, connect this repository, and deploy `render.yaml`. Set `FRONTEND_URL` to the Vercel origin from step 2, with no trailing slash. Set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`; Render generates `JWT_SECRET`. Leave `NODE_ENV=production`.
+4. Wait for Render's `/health` check to pass. Copy the backend URL, for example `https://your-service.onrender.com`.
+5. In [`frontend/js/config.js`](frontend/js/config.js), set `window.EVENT_API_BASE` to the Render API URL ending in `/api`, for example `https://your-service.onrender.com/api`. This is a public API address, not a secret. Commit and push this change; Vercel will redeploy from GitHub.
+6. Open the Vercel URL, register an account, sign in, and create an event to verify frontend-to-API and database connectivity.
 
 To grant the first account admin access, register it first, then run this in the Supabase SQL Editor with that account's email:
 
